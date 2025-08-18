@@ -1,0 +1,41 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+*.iml
+
+# Node
+node_modules/
+**/node_modules/
+.npm-cache/
+
+# Build outputs
+**/dist/
+**/build/
+**/.parcel-cache/
+**/.next/
+
+# Logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/*.log
+
+# Env
+.env
+.env.*
+
+# Java / Maven
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+
+# Misc
+*.local
+coverage/
