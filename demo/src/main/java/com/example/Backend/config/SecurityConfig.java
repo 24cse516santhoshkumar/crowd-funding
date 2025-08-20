@@ -1,6 +1,7 @@
 package com.example.Backend.config;
 
 import com.example.Backend.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,9 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Value("${cors.allowed-origins:*}")
+    private String allowedOriginsProperty;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -62,7 +66,18 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*");
+        if (allowedOriginsProperty != null) {
+            for (String origin : allowedOriginsProperty.split(",")) {
+                String trimmed = origin.trim();
+                if (trimmed.equals("*")) {
+                    configuration.addAllowedOriginPattern("*");
+                } else if (!trimmed.isEmpty()) {
+                    configuration.addAllowedOrigin(trimmed);
+                }
+            }
+        } else {
+            configuration.addAllowedOriginPattern("*");
+        }
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(false);

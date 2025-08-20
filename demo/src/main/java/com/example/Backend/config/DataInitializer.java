@@ -44,6 +44,10 @@ public class DataInitializer {
     @Value("${admin.password:Admin@123}")
     private String adminPassword;
 
+    // Control whether to seed non-admin test data
+    @Value("${seed.test.data:true}")
+    private boolean seedTestData;
+
     @Bean
     public CommandLineRunner initData() {
         return args -> {
@@ -60,22 +64,24 @@ public class DataInitializer {
             userRepository.save(adminUser);
             System.out.println("Admin user ensured: " + adminUser.getEmail());
             
-            // Create regular user for testing
-            User regularUser = new User();
-            regularUser.setName("testuser");
-            regularUser.setEmail("testuser@gmail.com");
-            regularUser.setPassword(passwordEncoder.encode("password"));
-            regularUser.setIsAdmin(false);
-            userRepository.save(regularUser);
-            
-            System.out.println("Regular user created: " + regularUser.getEmail());
-            
-            // Create test category
-            Category testCategory = new Category();
-            testCategory.setName("Technology");
-            categoryRepository.save(testCategory);
-            
-            System.out.println("Test category created: " + testCategory.getName());
+            if (seedTestData) {
+                // Create regular user for testing
+                User regularUser = new User();
+                regularUser.setName("testuser");
+                regularUser.setEmail("testuser@gmail.com");
+                regularUser.setPassword(passwordEncoder.encode("password"));
+                regularUser.setIsAdmin(false);
+                userRepository.save(regularUser);
+
+                System.out.println("Regular user created: " + regularUser.getEmail());
+
+                // Create test category
+                Category testCategory = new Category();
+                testCategory.setName("Technology");
+                categoryRepository.save(testCategory);
+
+                System.out.println("Test category created: " + testCategory.getName());
+            }
         };
     }
 }
