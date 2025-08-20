@@ -4,10 +4,8 @@ databases:
 services:
   - type: web
     name: crowdfund-backend
-    env: java
-    rootDir: demo
-    buildCommand: mvn -DskipTests package
-    startCommand: java -jar target/demo-0.0.1-SNAPSHOT.jar
+    env: docker
+    dockerfilePath: demo/Dockerfile
     healthCheckPath: /api/campaigns
     autoDeploy: true
     envVars:
