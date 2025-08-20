@@ -36,6 +36,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/campaigns/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/campaigns").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/donations").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/donations/debug/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/donations/**").authenticated()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/users/**").hasAuthority("ROLE_ADMIN")

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import api from '../api/api'
 import { Heart, School, Stethoscope, Trees, Ship, Cpu } from 'lucide-react'
 
@@ -37,11 +38,11 @@ export default function CategoriesSection(){
             const key = (cat.key || cat.name || '').toString().toLowerCase()
             const Icon = iconMap[key] || iconMap.other
             return (
-              <div key={cat.id || key} className="bg-blue-50 rounded-xl p-5 shadow hover:shadow-md transition border border-blue-100">
+              <motion.div key={cat.id || key} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} whileHover={{ y: -3 }} className="bg-blue-50 rounded-xl p-5 shadow hover:shadow-md transition border border-blue-100">
                 <Icon className="w-8 h-8 text-blue-600 mb-3" />
                 <h3 className="text-lg font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">{cat.description || 'Explore campaigns in this category.'}</p>
-              </div>
+              </motion.div>
             )
           })}
         </div>
@@ -49,6 +50,7 @@ export default function CategoriesSection(){
     </section>
   )
 }
+
 
 
 

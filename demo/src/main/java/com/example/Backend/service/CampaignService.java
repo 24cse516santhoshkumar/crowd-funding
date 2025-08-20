@@ -81,6 +81,10 @@ public class CampaignService {
         return campaignRepository.findByTitleContainingIgnoreCase(keyword, PageRequest.of(page, size, Sort.by(sortBy)));
     }
 
+    public Page<Campaign> getCampaignsByCreator(User creator, int page, int size, String sortBy) {
+        return campaignRepository.findByCreator(creator, PageRequest.of(page, size, Sort.by(sortBy)));
+    }
+
     public void updateStatus(Campaign campaign) {
         if (campaign.getRaisedAmount() >= campaign.getGoalAmount()) {
             campaign.setStatus(CampaignStatus.COMPLETED);

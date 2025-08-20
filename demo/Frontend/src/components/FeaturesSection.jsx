@@ -1,4 +1,5 @@
 import { Lightbulb, ShieldCheck, Globe2, Users } from "lucide-react";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -27,20 +28,31 @@ function FeaturesSection() {
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold text-gray-900 mb-12">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          className="text-4xl font-bold text-gray-900 mb-12"
+        >
           Why Choose Our <span className="text-blue-600">Crowdfunding</span> Platform?
-        </h2>
+        </motion.h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              whileHover={{ y: -4 }}
               className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition"
             >
               <feature.icon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.title}</h3>
               <p className="text-gray-600">{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

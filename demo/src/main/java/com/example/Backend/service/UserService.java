@@ -33,7 +33,15 @@ public class UserService {
     public User updateUser(Long id, User user) {
         return userRepository.findById(id).map(existing -> {
             existing.setName(user.getName());
-            existing.setEmail(user.getEmail());
+            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                existing.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                existing.setPassword(user.getPassword());
+            }
+            if (user.getIsAdmin() != null) {
+                existing.setIsAdmin(user.getIsAdmin());
+            }
             return userRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }

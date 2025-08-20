@@ -6,6 +6,8 @@ import com.example.Backend.service.CampaignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import com.example.Backend.entity.User;
+import com.example.Backend.service.UserService;
 
 @RestController
 @RequestMapping("/api/campaigns")
@@ -14,6 +16,9 @@ public class CampaignController {
 
     @Autowired
     private CampaignService campaignService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     public Campaign create(@RequestBody Campaign campaign) {
@@ -62,5 +67,23 @@ public class CampaignController {
     @PutMapping("/{id}/start")
     public Campaign start(@PathVariable Long id) {
         return campaignService.startCampaign(id);
+    }
+
+    @GetMapping("/my-campaigns")
+    public Page<Campaign> getMyCampaigns(org.springframework.security.core.Authentication authentication,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(defaultValue = "id") String sortBy) {
+        if (authentication == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+        
+        String email = authentication.getName();
+        User currentUser = userService.getUserByEmail(email);
+        if (currentUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        
+        return campaignService.getCampaignsByCreator(currentUser, page, size, sortBy);
     }
 }

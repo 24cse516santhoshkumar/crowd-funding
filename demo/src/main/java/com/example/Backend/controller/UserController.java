@@ -42,6 +42,14 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User update(@PathVariable Long id, @RequestBody User user) {
+        // Normalize email
+        if (user.getEmail() != null) {
+            user.setEmail(user.getEmail().trim().toLowerCase());
+        }
+        // Encode password if provided
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userService.updateUser(id, user);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import com.example.Backend.entity.User;
 
 @Service
 public class DonationService {
@@ -41,6 +42,23 @@ public class DonationService {
 
     public Optional<Donation> getDonationById(Long id) {
         return donationRepository.findById(id);
+    }
+
+    public Page<Donation> getDonationsByDonor(User donor, int page, int size, String sortBy) {
+        System.out.println("DonationService: Finding donations for donor: " + donor.getEmail() + " (ID: " + donor.getId() + ")");
+        System.out.println("DonationService: Page: " + page + ", Size: " + size + ", SortBy: " + sortBy);
+        
+        Page<Donation> donations = donationRepository.findByDonor(donor, PageRequest.of(page, size, Sort.by(sortBy)));
+        System.out.println("DonationService: Found " + donations.getTotalElements() + " donations");
+        
+        // Debug: Print each donation
+        donations.getContent().forEach(donation -> {
+            System.out.println("DonationService: Donation ID: " + donation.getId() + 
+                             ", Amount: " + donation.getAmount() + 
+                             ", Campaign: " + (donation.getCampaign() != null ? donation.getCampaign().getTitle() : "null"));
+        });
+        
+        return donations;
     }
 
     public void deleteDonation(Long id) {

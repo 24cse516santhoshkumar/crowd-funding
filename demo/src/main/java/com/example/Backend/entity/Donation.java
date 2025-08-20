@@ -1,5 +1,6 @@
 package com.example.Backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,6 +20,7 @@ public class Donation {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User donor;
 
     // Getters and Setters

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import api from '../api/api'
 
 export default function StatsSection(){
@@ -23,23 +24,24 @@ export default function StatsSection(){
     <section className="py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-          <div className="bg-white rounded-2xl shadow p-8">
-            <div className="text-4xl font-extrabold text-blue-600">{stats.campaigns}</div>
-            <div className="text-gray-600 mt-1">Active Campaigns</div>
-          </div>
-          <div className="bg-white rounded-2xl shadow p-8">
-            <div className="text-4xl font-extrabold text-green-600">{stats.backers}</div>
-            <div className="text-gray-600 mt-1">Registered Backers</div>
-          </div>
-          <div className="bg-white rounded-2xl shadow p-8">
-            <div className="text-4xl font-extrabold text-purple-600">{formatMoney(stats.raised)}</div>
-            <div className="text-gray-600 mt-1">Total Raised</div>
-          </div>
+          {[{
+            value: stats.campaigns, label: 'Active Campaigns', color: 'text-blue-600'
+          },{
+            value: stats.backers, label: 'Registered Backers', color: 'text-green-600'
+          },{
+            value: formatMoney(stats.raised), label: 'Total Raised', color: 'text-purple-600'
+          }].map((s, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-white rounded-2xl shadow p-8">
+              <div className={`text-4xl font-extrabold ${s.color}`}>{s.value}</div>
+              <div className="text-gray-600 mt-1">{s.label}</div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
+
 
 
 

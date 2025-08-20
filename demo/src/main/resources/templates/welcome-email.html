@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Crowd Funding Platform!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        .title {
+            color: #1f2937;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #10b981;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .button:hover {
+            background-color: #059669;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .highlight {
+            background-color: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #1e40af;
+        }
+        .oauth-badge {
+            display: inline-block;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🚀 Crowd Funding</div>
+            <h1 class="title">Welcome to Crowd Funding Platform!</h1>
+        </div>
+        
+        <div class="content">
+            <p>Hello <strong th:text="${userName}">User</strong>,</p>
+            
+            <p>🎉 Welcome to Crowd Funding Platform! We're excited to have you on board.</p>
+            
+            <div class="highlight">
+                <strong>✅ Account Created Successfully</strong><br>
+                You've signed up using <span class="oauth-badge" th:text="${oauthProvider}">OAuth Provider</span>
+            </div>
+            
+            <p>Your account has been automatically verified and is ready to use. You can now:</p>
+            
+            <ul>
+                <li>🚀 Create and manage crowdfunding campaigns</li>
+                <li>💝 Support projects you believe in</li>
+                <li>👥 Connect with other creators and supporters</li>
+                <li>💰 Manage your wallet and transactions</li>
+            </ul>
+            
+            <div style="text-align: center;">
+                <a th:href="${loginUrl}" class="button">Get Started Now</a>
+            </div>
+            
+            <p><strong>Need help getting started?</strong> Here are some resources:</p>
+            <ul>
+                <li>📖 <a href="#">User Guide</a> - Learn how to use the platform</li>
+                <li>🎯 <a href="#">Campaign Best Practices</a> - Tips for successful campaigns</li>
+                <li>❓ <a href="#">FAQ</a> - Common questions and answers</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>If you have any questions, feel free to reach out to our support team at <a href="mailto:support@crowdfunding.com" th:href="'mailto:' + ${supportEmail}" th:text="${supportEmail}">support@crowdfunding.com</a></p>
+            <p>© 2024 Crowd Funding Platform. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

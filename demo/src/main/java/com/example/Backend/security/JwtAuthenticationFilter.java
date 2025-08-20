@@ -31,10 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter implements Use
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
+        System.out.println("JWT Filter - Request URI: " + request.getRequestURI());
+        System.out.println("JWT Filter - Authorization header: " + (authHeader != null ? "Present" : "Missing"));
+        
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            System.out.println("JWT Filter - Token length: " + token.length());
             try {
                 String email = jwtService.validateAndGetSubject(token);
+                System.out.println("JWT Filter - Token validated for email: " + email);
                 User user = userRepository.findByEmail(email);
                 if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = loadUserByUsername(email);
@@ -42,8 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter implements Use
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("JWT Filter - Authentication set for user: " + email);
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                System.out.println("JWT Filter - Error processing token: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("JWT Filter - No valid Authorization header found");
         }
         filterChain.doFilter(request, response);
     }
@@ -66,6 +77,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter implements Use
                 .build();
     }
 }
+
+
 
 
 

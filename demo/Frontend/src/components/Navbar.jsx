@@ -68,16 +68,19 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-8 font-medium text-white/90">
-          <Link to="/" className="hover:text-white transition">Landing</Link>
+          <Link to="/" className="hover:text-white transition">Home</Link>
           <Link to="/campaigns" className="hover:text-white transition">Campaigns</Link>
           <Link to="/create" className="hover:text-white transition">Create</Link>
           <Link to="/about" className="hover:text-white transition">About</Link>
           {!isAuthed ? (
-            <Link to="/login" className="hover:text-white transition">Login</Link>
+            <div className="flex items-center gap-6">
+              <Link to="/login" className="hover:text-white transition">Login</Link>
+              <Link to="/register" className="hover:text-white transition">Register</Link>
+            </div>
           ) : (
             <div className="flex items-center gap-4">
-              <Link to="/home" className="hover:text-white transition">Home</Link>
               <Link to="/profile" className="text-accent-300 font-medium hover:text-white transition">Hi, {user?.name || 'User'}</Link>
+              <Link to="/donations" className="hover:text-white transition">My Donations</Link>
               {user?.isAdmin && (
                 <Link to="/admin" className="text-yellow-300 font-medium hover:text-white transition">Admin</Link>
               )}
@@ -108,16 +111,19 @@ function Navbar() {
           className="md:hidden bg-brand-700/95 text-white backdrop-blur-md shadow-lg"
         >
           <div className="flex flex-col items-center space-y-4 py-6 text-lg font-medium">
-            <Link to="/" onClick={() => setOpen(false)}>Landing</Link>
+            <Link to="/" onClick={() => setOpen(false)}>Home</Link>
             <Link to="/campaigns" onClick={() => setOpen(false)}>Campaigns</Link>
             <Link to="/create" onClick={() => setOpen(false)}>Create</Link>
             <Link to="/about" onClick={() => setOpen(false)}>About</Link>
             {!isAuthed ? (
-              <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
+              <>
+                <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
+                <Link to="/register" onClick={() => setOpen(false)}>Register</Link>
+              </>
             ) : (
               <>
-                <Link to="/home" onClick={() => setOpen(false)}>Home</Link>
                 <Link to="/profile" onClick={() => setOpen(false)} className="text-accent-300 font-medium">Hi, {user?.name || 'User'}</Link>
+                <Link to="/donations" onClick={() => setOpen(false)}>My Donations</Link>
                 {user?.isAdmin && (
                   <Link to="/admin" onClick={() => setOpen(false)} className="text-yellow-300 font-medium">Admin Dashboard</Link>
                 )}

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/api'
+import { toast } from 'react-toastify'
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [users, setUsers] = useState([])
+  const [editingUser, setEditingUser] = useState(null)
+  const [form, setForm] = useState({ name: '', email: '', isAdmin: false, password: '' })
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -44,6 +47,38 @@ export default function AdminDashboard() {
 
     fetchUsers()
   }, [])
+
+  const startEdit = (u) => {
+    setEditingUser(u)
+    setForm({ name: u.name || '', email: u.email || '', isAdmin: !!u.isAdmin, password: '' })
+  }
+
+  const saveEdit = async () => {
+    if (!editingUser) return
+    try {
+      const payload = { name: form.name.trim(), email: (form.email || '').trim().toLowerCase(), isAdmin: form.isAdmin }
+      if (form.password && form.password.length >= 6) payload.password = form.password
+      const { data } = await api.put(`/api/users/${editingUser.id}`, payload)
+      setUsers(prev => prev.map(u => (u.id === editingUser.id ? data : u)))
+      setEditingUser(null)
+      toast.success('User updated')
+    } catch (err) {
+      console.error('AdminDashboard - Save edit error:', err)
+      toast.error('Failed to update user')
+    }
+  }
+
+  const deleteUser = async (u) => {
+    if (!confirm(`Delete user "${u.name}"?`)) return
+    try {
+      await api.delete(`/api/users/${u.id}`)
+      setUsers(prev => prev.filter(x => x.id !== u.id))
+      toast.success('User deleted')
+    } catch (err) {
+      console.error('AdminDashboard - Delete error:', err)
+      toast.error('Failed to delete user')
+    }
+  }
 
   if (loading) {
     return (
@@ -90,8 +125,8 @@ export default function AdminDashboard() {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                      <button className="text-red-600 hover:text-red-900">Delete</button>
+                      <button onClick={() => startEdit(user)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                      <button onClick={() => deleteUser(user)} className="text-red-600 hover:text-red-900">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -99,6 +134,35 @@ export default function AdminDashboard() {
             </table>
           </div>
         </div>
+        {editingUser && (
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 space-y-4">
+              <h3 className="text-lg font-semibold">Edit User</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Name</label>
+                  <input value={form.name} onChange={(e)=>setForm({...form, name: e.target.value})} className="w-full border p-2 rounded" />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Email</label>
+                  <input value={form.email} onChange={(e)=>setForm({...form, email: e.target.value})} className="w-full border p-2 rounded" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input id="isAdmin" type="checkbox" checked={form.isAdmin} onChange={(e)=>setForm({...form, isAdmin: e.target.checked})} />
+                  <label htmlFor="isAdmin" className="text-sm text-gray-700">Is Admin</label>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Password (optional, min 6)</label>
+                  <input type="password" value={form.password} onChange={(e)=>setForm({...form, password: e.target.value})} className="w-full border p-2 rounded" />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button onClick={()=>setEditingUser(null)} className="px-4 py-2 rounded bg-gray-100">Cancel</button>
+                <button onClick={saveEdit} className="px-4 py-2 rounded bg-indigo-600 text-white">Save</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

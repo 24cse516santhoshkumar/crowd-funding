@@ -7,7 +7,9 @@ import CampaignDetails from "./pages/CampaignDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Logout from "./pages/Logout";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
+import DonationsPage from "./pages/DonationsPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import TestAdminLogin from "./pages/TestAdminLogin";
 import Navbar from "./components/Navbar";
@@ -30,9 +32,11 @@ export default function App() {
         <Route path="/campaigns/:id" element={<CampaignDetails />} />
         <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
         <Route path="/register" element={<PublicOnly><Register /></PublicOnly>} />
+        <Route path="/reset-password" element={<PublicOnly><ResetPassword /></PublicOnly>} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/about" element={<About />} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/donations" element={<ProtectedRoute><DonationsPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/test-admin-login" element={<TestAdminLogin />} />
       </Routes>
